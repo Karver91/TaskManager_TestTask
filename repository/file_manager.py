@@ -1,5 +1,8 @@
 import json
 from abc import ABC, abstractmethod
+from datetime import datetime
+
+from config import settings
 
 
 class BaseFileManager(ABC):
@@ -42,6 +45,14 @@ class BaseFileManager(ABC):
             raise ValueError('Объект не обнаружен в базе')
 
 
+class DatetimeJSONEncoder(json.JSONEncoder):
+    """Кастомный энкодер. Переводит объект datetime в строку переданного формата"""
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.strftime(settings.DATETIME_FORMAT)  # Преобразуем в строку переданного фората
+        return super().default(o)
+
+
 class JSONFileManager(BaseFileManager):
     """Отвечает за работу с JSON-файлом данных"""
     def __init__(self, model, data_path):
@@ -61,4 +72,4 @@ class JSONFileManager(BaseFileManager):
         """Записывает данные в файл"""
         with open(self.data_path, 'w', encoding='utf-8') as file:
             items = [item.to_dict() for item in self.data]
-            json.dump(obj=items, fp=file, ensure_ascii=False, indent=4)
+            json.dump(obj=items, fp=file, ensure_ascii=False, indent=4, cls=DatetimeJSONEncoder)

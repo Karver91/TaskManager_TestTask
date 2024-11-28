@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from config import settings
 from enums import TaskCategoryEnum, TaskStatusEnum
 from models.base_model import AbstractModel
 
@@ -27,4 +28,24 @@ class Task(AbstractModel):
         return vars(self)
 
     def validate(self):
-        pass
+        if not isinstance(self.id, int) or self.id < 0:
+            raise ValueError("ID должен относится к типу int и быть больше нуля")
+        for value in (self.title, self.description, self.category, self.due_date, self.status):
+            self._validate_len_value(value)
+        self._validate_due_date_format()
+
+
+    def _validate_due_date_format(self):
+        try:
+            if isinstance(self.due_date, str):
+                self.due_date = datetime.strptime(self.due_date, settings.DATETIME_FORMAT)
+            if self.due_date < datetime.now():
+                raise ValueError('Дата выполнения задания не может быть меньше текущей')
+        except ValueError:
+            raise ValueError(f'Дата не соответствует формату {settings.DATETIME_FORMAT}')
+
+
+    @staticmethod
+    def _validate_len_value(value):
+        if len(value) < 1:
+            raise ValueError('Поля не заполнены')
