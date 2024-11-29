@@ -10,3 +10,9 @@ class TaskCategoryEnum(enum.Enum):
 class TaskStatusEnum(enum.Enum):
     COMPLETED = 'Выполнена'
     NOT_COMPLETED = 'Не выполнена'
+
+
+class TaskPriorityEnum(enum.Enum):
+    HIGH = 'высокий'
+    MEDIUM = 'средний'
+    LOW = 'низкий'

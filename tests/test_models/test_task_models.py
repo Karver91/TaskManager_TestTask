@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from enums import TaskCategoryEnum, TaskStatusEnum
+from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.task_models import Task
 
 
@@ -14,6 +14,7 @@ class TestTaskModel:
             'title': task.title,
             'description': task.description,
             'category': task.category,
+            'priority': task.priority,
             'due_date': task.due_date,
             'status': task.status
         }
@@ -28,6 +29,7 @@ class TestTaskModel:
             description='test_description',
             category=TaskCategoryEnum.PERSONAL.value,
             due_date=date_n_time,
+            priority=TaskPriorityEnum.LOW.value,
             status=TaskStatusEnum.NOT_COMPLETED.value
         )
 
@@ -48,8 +50,10 @@ class TestTaskModel:
                 description='test_description',
                 category=TaskCategoryEnum.PERSONAL.value,
                 due_date=date_n_time,
+                priority=TaskPriorityEnum.LOW.value,
                 status=TaskStatusEnum.NOT_COMPLETED.value
             )
+            # это законченный тест, исключение вылетает в момент создания модели
 
 
     def test_validate_len_value_exceptions(self):
@@ -60,5 +64,6 @@ class TestTaskModel:
                 description='',
                 category=TaskCategoryEnum.PERSONAL.value,
                 due_date='',
+                priority=TaskPriorityEnum.LOW.value,
                 status=TaskStatusEnum.NOT_COMPLETED.value
             )

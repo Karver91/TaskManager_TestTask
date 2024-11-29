@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from config import settings
-from enums import TaskCategoryEnum, TaskStatusEnum
+from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.base_model import AbstractModel
 
 
@@ -12,7 +12,8 @@ class Task(AbstractModel):
             title: str,
             description: str,
             category: TaskCategoryEnum,
-            due_date: datetime = None,
+            due_date: datetime,
+            priority: TaskPriorityEnum,
             status: TaskStatusEnum = None
     ):
         self.id = id
@@ -20,6 +21,7 @@ class Task(AbstractModel):
         self.description = description
         self.category = category
         self.due_date = due_date
+        self.priority = priority
         self.status = TaskStatusEnum.NOT_COMPLETED.value if not status else status
 
         self.validate()
@@ -30,7 +32,7 @@ class Task(AbstractModel):
     def validate(self):
         if not isinstance(self.id, int) or self.id < 0:
             raise ValueError("ID должен относится к типу int и быть больше нуля")
-        for value in (self.title, self.description, self.category, self.due_date, self.status):
+        for value in (self.title, self.description, self.category, self.priority, self.due_date, self.status):
             self._validate_len_value(value)
         self._validate_due_date_format()
 
@@ -47,5 +49,5 @@ class Task(AbstractModel):
 
     @staticmethod
     def _validate_len_value(value):
-        if len(value) < 1:
+        if isinstance(value, str) and len(value) < 1:
             raise ValueError('Поля не заполнены')

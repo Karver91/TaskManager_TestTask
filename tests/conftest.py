@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 
 from config import settings
-from enums import TaskCategoryEnum, TaskStatusEnum
+from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.task_models import Task
 from repository.file_manager import JSONFileManager
 
@@ -20,7 +20,8 @@ def task_repository(tmp_path):
         title='test_title',
         description='test_description',
         category=TaskCategoryEnum.PERSONAL.value,
-        due_date=datetime.now(),
+        due_date='3024-10-01',
+        priority=TaskPriorityEnum.LOW.value,
         status=TaskStatusEnum.NOT_COMPLETED.value
     )
 
