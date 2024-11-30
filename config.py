@@ -3,7 +3,7 @@ import os
 
 class Settings:
     DATETIME_FORMAT = '%Y-%m-%d'
-    LANGUAGE = 'ru'  # 'ru', 'en'
+    LANGUAGE = 'en'  # 'ru', 'en'
     __DATA_DIR_NAME = 'data'
     __DATA_FILE_NAME = 'data.json'
 

@@ -31,4 +31,4 @@ def __get_lexicon():
     return __lang_code[lang]()
 
 
-COMMANDS_LEXICON, MESSAGE_LEXICON, EXCEPTION_LEXICON = __get_lexicon()
+COMMANDS_LEXICON, MESSAGE_LEXICON, ENUMS_LEXICON, EXCEPTION_LEXICON = __get_lexicon()

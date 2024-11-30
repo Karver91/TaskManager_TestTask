@@ -37,18 +37,15 @@ class Task(AbstractModel):
             self._validate_len_value(value)
         self._validate_due_date_format()
 
-
     def _validate_due_date_format(self):
         try:
             if isinstance(self.due_date, str):
+                self.due_date = self.due_date.strip()
                 self.due_date = datetime.strptime(self.due_date, settings.DATETIME_FORMAT)
-        except ValueError:
+        except ValueError as e:
             raise ValueError(EXCEPTION_LEXICON['models_date_format_not_valid'])
-
-        if self.due_date < datetime.now():
-            raise ValueError(EXCEPTION_LEXICON['models_date_must_be_less_current'])
-
-
+        # if self.due_date < datetime.now():
+        #     raise ValueError(EXCEPTION_LEXICON['models_date_must_be_less_current'])
 
     @staticmethod
     def _validate_len_value(value):

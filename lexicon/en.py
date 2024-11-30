@@ -8,10 +8,39 @@ __MESSAGE_LEXICON = {
     'input_msg': 'Input',
     'welcome_message': 'Welcome to our Task Manager!\n'
                        'The control element is a set of simple text commands',
-    'unknown command': 'Unknown command. Type "help" for a list of commands'
+    'unknown command': 'Unknown command. Type "help" for a list of commands',
+    'add_task_info': 'To add a new task, you need to specify the task name, its description, '
+                     'the deadline for its completion; and also select the task category '
+                     'and the priority of its completion',
+    'input_task_title': 'Enter the task name',
+    'input_task_description': 'Enter the task description',
+    'input_task_date': f'Enter the task completion date in the format {settings.DATETIME_FORMAT}',
+    'add_task_success': 'Task added successfully',
+    'task_not_found': 'No tasks found',
+    'title': 'Title',
+    'description': 'Description',
+    'category': 'Category',
+    'due_date': 'Completion date',
+    'priority': 'Priority',
+    'status': 'Status',
+    'cancel': 'Cancel',
+    'select_category': 'Select category',
+    'select_priority': 'Select priority'
+}
+
+__ENUMS_LEXICON = {
+    'WORK': 'Work',
+    'PERSONAL': 'Personal',
+    'EDUCATION': 'Education',
+    'COMPLETED': 'Completed',
+    'NOT_COMPLETED': 'Not Completed',
+    'HIGH': 'High',
+    'MEDIUM': 'Medium',
+    'LOW': 'Low'
 }
 
 __COMMANDS_LEXICON = {
+    'add_task': 'Add task',
     'help': 'Displays a list of commands on the screen',
     'exit': 'Exit the application'
 }
@@ -28,5 +57,4 @@ __EXCEPTION_LEXICON = {
 
 
 def get_lexicon():
-    return __COMMANDS_LEXICON, __MESSAGE_LEXICON, __EXCEPTION_LEXICON
-
+    return __COMMANDS_LEXICON, __MESSAGE_LEXICON, __ENUMS_LEXICON, __EXCEPTION_LEXICON

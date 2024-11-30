@@ -9,6 +9,7 @@ class CommandProcessor:
         self.commands = {
             'help': {'method': self.help_command, 'description': COMMANDS_LEXICON['help']},
             'exit': {'method': self.exit_command, 'description': COMMANDS_LEXICON['exit']},
+            '1': {'method': self.task_controller.add_task, 'description': COMMANDS_LEXICON['add_task']}
         }
 
     def process_command(self, command: str) -> None:
@@ -33,5 +34,4 @@ class CommandProcessor:
                 user_input = console.user_input().lower()
                 self.process_command(user_input)
         except KeyboardInterrupt:
-            console.print_message(MESSAGE_LEXICON['exit_command_msg'])
-            exit()
+            self.exit_command()

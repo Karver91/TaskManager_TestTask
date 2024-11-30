@@ -15,9 +15,10 @@ def main():
     processor = CommandProcessor(task_controller)
     processor.run()
 
+
 if __name__ == '__main__':
     try:
         main()
-    except Exception:
+    except Exception as e:
         # logger.log_exception(traceback.format_exc())
         console.print_exception_message(EXCEPTION_LEXICON['exception_msg'])

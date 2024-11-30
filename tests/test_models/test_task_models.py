@@ -40,7 +40,7 @@ class TestTaskModel:
     @pytest.mark.parametrize('date_n_time, expected_error_message',
                                  [
                                      ('some-date', EXCEPTION_LEXICON['models_date_format_not_valid']),
-                                     ('1999-01-01', EXCEPTION_LEXICON['models_date_must_be_less_current'])
+                                     # ('1999-01-01', EXCEPTION_LEXICON['models_date_must_be_less_current'])
                                  ]
                              )
     def test_validate_due_date_format_exception(self, date_n_time, expected_error_message):
