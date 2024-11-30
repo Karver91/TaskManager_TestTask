@@ -5,11 +5,11 @@ from lexicon import ru, en
 class LexiconManager:
     @staticmethod
     def get_ru_lexicon():
-        return ru._COMMANDS_LEXICON, ru._MESSAGE_LEXICON, ru._EXCEPTION_LEXICON
+        return ru.get_lexicon()
 
     @staticmethod
     def get_en_lexicon():
-        return en._COMMANDS_LEXICON, en._MESSAGE_LEXICON, en._EXCEPTION_LEXICON
+        return en.get_lexicon()
 
 
 __lm = LexiconManager()

@@ -1,9 +1,11 @@
 from config import settings
 from controllers.command_processor import CommandProcessor
 from controllers.task_controller import TaskController
+from lexicon.lexicon_manager import EXCEPTION_LEXICON
 from models.task_models import Task
 from repository.file_manager import JSONFileManager, BaseFileManager
 from services.task_service import TaskService
+from views.view import console
 
 
 def main():
@@ -14,4 +16,8 @@ def main():
     processor.run()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:
+        # logger.log_exception(traceback.format_exc())
+        console.print_exception_message(EXCEPTION_LEXICON['exception_msg'])

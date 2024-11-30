@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 
 from config import settings
+from lexicon.lexicon_manager import EXCEPTION_LEXICON
 
 
 class BaseFileManager(ABC):
@@ -30,7 +31,7 @@ class BaseFileManager(ABC):
                 _id = max([item.id for item in self.data]) + 1
             return _id
         except AttributeError:
-            raise AttributeError(f'Ошибка генерации id, не найден атрибут id')
+            raise AttributeError(EXCEPTION_LEXICON['repository_id_generated_failed'])
 
 
     def add_data_obj(self, obj):
@@ -42,7 +43,7 @@ class BaseFileManager(ABC):
             self.data.remove(obj)
             self.write_file()
         except ValueError:
-            raise ValueError('Объект не обнаружен в базе')
+            raise ValueError(EXCEPTION_LEXICON['repository_object_not_found'])
 
 
 class DatetimeJSONEncoder(json.JSONEncoder):

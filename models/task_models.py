@@ -2,6 +2,7 @@ from datetime import datetime
 
 from config import settings
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
+from lexicon.lexicon_manager import EXCEPTION_LEXICON
 from models.base_model import AbstractModel
 
 
@@ -31,7 +32,7 @@ class Task(AbstractModel):
 
     def validate(self):
         if not isinstance(self.id, int) or self.id < 0:
-            raise ValueError("ID должен относится к типу int и быть больше нуля")
+            raise ValueError(EXCEPTION_LEXICON['models_id_not_valid'])
         for value in (self.title, self.description, self.category, self.priority, self.due_date, self.status):
             self._validate_len_value(value)
         self._validate_due_date_format()
@@ -41,13 +42,15 @@ class Task(AbstractModel):
         try:
             if isinstance(self.due_date, str):
                 self.due_date = datetime.strptime(self.due_date, settings.DATETIME_FORMAT)
-            if self.due_date < datetime.now():
-                raise ValueError('Дата выполнения задания не может быть меньше текущей')
         except ValueError:
-            raise ValueError(f'Дата не соответствует формату {settings.DATETIME_FORMAT}')
+            raise ValueError(EXCEPTION_LEXICON['models_date_format_not_valid'])
+
+        if self.due_date < datetime.now():
+            raise ValueError(EXCEPTION_LEXICON['models_date_must_be_less_current'])
+
 
 
     @staticmethod
     def _validate_len_value(value):
         if isinstance(value, str) and len(value) < 1:
-            raise ValueError('Поля не заполнены')
+            raise ValueError(EXCEPTION_LEXICON['models_fields_length_not_valid'])

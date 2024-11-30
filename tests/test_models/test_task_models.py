@@ -3,6 +3,7 @@ from datetime import datetime
 import pytest
 
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
+from lexicon.lexicon_manager import EXCEPTION_LEXICON
 from models.task_models import Task
 
 
@@ -36,14 +37,14 @@ class TestTaskModel:
         task._validate_due_date_format()
         assert isinstance(task.due_date, datetime)
 
-    @pytest.mark.parametrize('date_n_time',
+    @pytest.mark.parametrize('date_n_time, expected_error_message',
                                  [
-                                     'some-date',  # Неверный формат даты
-                                     '1999-01-01'  # Время меньше текущего
+                                     ('some-date', EXCEPTION_LEXICON['models_date_format_not_valid']),
+                                     ('1999-01-01', EXCEPTION_LEXICON['models_date_must_be_less_current'])
                                  ]
                              )
-    def test_validate_due_date_format_exception(self, date_n_time):
-        with pytest.raises(ValueError):
+    def test_validate_due_date_format_exception(self, date_n_time, expected_error_message):
+        with pytest.raises(ValueError, match=expected_error_message):
             Task(
                 id=1,
                 title='test_title',
@@ -57,7 +58,7 @@ class TestTaskModel:
 
 
     def test_validate_len_value_exceptions(self):
-        with pytest.raises(ValueError, match='Поля не заполнены'):
+        with pytest.raises(ValueError, match=EXCEPTION_LEXICON['models_fields_length_not_valid']):
             Task(
                 id=1,
                 title='',
