@@ -7,20 +7,31 @@ class BaseService:
     def __init__(self, repository: BaseFileManager):
         self.repository = repository
 
-    def get_status_commands(self, enum_obj, cansel_command: bool = False) -> dict[dict]:
+    @staticmethod
+    def get_enumerate_commands(values, cansel_command: bool = False) -> dict[dict]:
         """Возвращает список команд для изменения статуса"""
-        statuses = self.get_all_enum_statuses(enum_obj)
-        status_values = [x[1].value for x in statuses]
-        commands = {str(key): {'description': value} for key, value in enumerate(status_values, start=1)}
+        commands = {str(key): {'description': value} for key, value in enumerate(values, start=1)}
         if cansel_command:
             commands['0'] = {'description': MESSAGE_LEXICON['cancel']}
         return commands
 
+    def get_enumerate_commands_from_enum(self, enum_type, cansel_command: bool = False):
+        """Возвращает список команд для объекта enum"""
+        values = self.get_enum_values(enum_type)
+        commands = self.get_enumerate_commands(values, cansel_command=cansel_command)
+        return commands
+
+    def get_enum_values(self, enum_type):
+        """Возвращает значения объекта enum"""
+        statuses = self.get_all_enum_statuses(enum_type)
+        values = [x[1].value for x in statuses]
+        return values
+
     @staticmethod
-    def get_all_enum_statuses(enum_obj) -> list[tuple]:
+    def get_all_enum_statuses(enum_type) -> list[tuple]:
         """Возвращает статусы объекта enum"""
         result = list()
-        for name, member in enum_obj.__members__.items():
+        for name, member in enum_type.__members__.items():
             result.append((name, member))
         return result
 

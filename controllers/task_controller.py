@@ -33,20 +33,20 @@ class TaskController:
 
     def get_category(self) -> str:
         """Предлагает пользователю выбрать категорию таски"""
-        return self.get_user_choice_from_command_list(
-            TaskCategoryEnum, f'{MESSAGE_LEXICON['select_category']}:'
+        commands = self.service.get_enumerate_commands_from_enum(TaskCategoryEnum)
+        return self.get_user_choice_from_commands(
+            commands, f'{MESSAGE_LEXICON['select_category']}:'
         )
 
     def get_priority(self):
         """Предлагает пользователю выбрать приоритет таски"""
-        return self.get_user_choice_from_command_list(
-            TaskPriorityEnum, f'{MESSAGE_LEXICON['select_priority']}:'
+        commands = self.service.get_enumerate_commands_from_enum(TaskPriorityEnum)
+        return self.get_user_choice_from_commands(
+            commands, f'{MESSAGE_LEXICON['select_priority']}:'
         )
 
-    def get_user_choice_from_command_list(self, enam_type: EnumType, title_msg: str,
-                                          cansel_button: bool = False) -> str:
-        """Возвращает значение enum, которое выбрал пользователь из списка команд"""
-        commands = self.service.get_status_commands(enam_type, cansel_command=cansel_button)
+    def get_user_choice_from_commands(self, commands: dict[dict], title_msg: str) -> str:
+        """Возвращает значение, которое выбрал пользователь из списка команд"""
         console.print_command_info(commands, title_msg=title_msg)
         user_input = self.user_input_command(commands)
         status = commands[user_input]['description']

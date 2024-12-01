@@ -1,8 +1,5 @@
-from datetime import datetime
-
 import pytest
 
-from config import settings
 from controllers.task_controller import TaskController
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.task_models import Task
