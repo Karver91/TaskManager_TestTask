@@ -7,13 +7,13 @@ from views.view import console
 
 
 class TaskController:
-    """Обрабатывает команды, связанные с книгами"""
+    """Обрабатывает команды, связанные с тасками"""
 
     def __init__(self, service: TaskService):
         self.service = service
 
     def add_task(self) -> None:
-        """Добавление новой задачи"""
+        """Добавление новой таски"""
         try:
             console.print_message(MESSAGE_LEXICON['add_task_info'])
             category = self.get_category()
@@ -58,7 +58,7 @@ class TaskController:
         while True:
             user_input = console.user_input()
             if not user_input in commands.keys():
-                console.print_message("Введена неверная команда. Попробуйте еще раз")
+                console.print_message(MESSAGE_LEXICON['invalid_command'])
                 continue
             break
         return user_input

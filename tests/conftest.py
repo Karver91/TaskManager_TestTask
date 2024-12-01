@@ -3,9 +3,11 @@ from datetime import datetime
 import pytest
 
 from config import settings
+from controllers.task_controller import TaskController
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.task_models import Task
 from repository.file_manager import JSONFileManager
+from services.task_service import TaskService
 
 
 @pytest.fixture
@@ -28,3 +30,21 @@ def task_repository(tmp_path):
     repository.add_data_obj(test_data)
 
     yield repository
+
+
+@pytest.fixture
+def task_service(task_repository):
+    service = TaskService(
+        repository=task_repository
+    )
+
+    yield service
+
+
+@pytest.fixture
+def task_controller(task_service):
+    controller = TaskController(
+        service=task_service
+    )
+
+    yield controller

@@ -24,7 +24,8 @@ __MESSAGE_LEXICON = {
     'status': 'Статус',
     'cancel': 'Отмена',
     'select_category': 'Выберете категорию',
-    'select_priority': 'Выберете приоритет'
+    'select_priority': 'Выберете приоритет',
+    'invalid_command': 'Введена неверная команда. Попробуйте еще раз'
 }
 
 __ENUMS_LEXICON = {
