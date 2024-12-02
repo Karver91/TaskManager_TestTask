@@ -25,6 +25,7 @@ class ConsoleView:
         print(f'\n{separator * len_separator}\n{msg_format}\n{separator * len_separator}')
 
     def print_task_info(self, task: Task):
+        """Выводит информацию о задаче"""
         print(
             f"{task.id:<5} "
             f"{task.title:<30} "
@@ -36,7 +37,7 @@ class ConsoleView:
 
     @staticmethod
     def print_task_info_detail(task: Task):
-        """Выводит информацию о задаче"""
+        """Выводит подробную информацию о задаче"""
         print(
             f"\nID: {task.id}\n"
             f"{MESSAGE_LEXICON['title']}: {task.title}\n"
@@ -48,11 +49,12 @@ class ConsoleView:
         )
 
     def print_task_not_found(self):
+        """Выводит сообщение, если задача не найдена"""
         self.print_message(MESSAGE_LEXICON['task_not_found'])
 
 
     def print_message_with_task_info(self, task, msg):
-        """Выводит переданное сообщение и информацию о"""
+        """Выводит переданное сообщение и информацию о таске"""
         if not task:
             self.print_task_not_found()
             return
@@ -89,7 +91,6 @@ class ConsoleView:
         self.print_message(MESSAGE_LEXICON['exit_command_msg'])
 
     def print_welcome_message(self):
-        """Выводит приветственное сообщение"""
         self.print_message(MESSAGE_LEXICON['welcome_message'])
 
     @staticmethod

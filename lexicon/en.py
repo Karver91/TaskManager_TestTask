@@ -34,7 +34,10 @@ __MESSAGE_LEXICON = {
     'search_by_category': 'Search tasks by category',
     'search_by_priority': 'Search tasks by priority',
     'search_by_status': 'Search tasks by completion status',
-    'search_by_keyword_info': 'The keyword can be the task name, description, category, priority, or status'
+    'search_by_keyword_info': 'The keyword can be the task name, description, category, priority, or status',
+    'delete_by_id': 'Delete task by its ID',
+    'deleted_success': 'The deletion has been completed successfully!',
+    'delete_completed_tasks': 'Delete all completed tasks'
 }
 
 __ENUMS_LEXICON = {
@@ -52,6 +55,7 @@ __COMMANDS_LEXICON = {
     'add_task': 'Add task',
     'show_tasks': 'Show tasks',
     'search_tasks': 'Search for tasks',
+    'delete_task': 'Delete task',
     'help': 'Displays a list of commands on the screen',
     'exit': 'Exit the application'
 }

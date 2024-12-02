@@ -1,3 +1,4 @@
+from enums import TaskStatusEnum
 from lexicon.lexicon_manager import MESSAGE_LEXICON
 from models.task_models import Task
 from repository.file_manager import BaseFileManager
@@ -36,6 +37,19 @@ class BaseService:
         for name, member in enum_type.__members__.items():
             result.append((name, member))
         return result
+
+    def get_obj_by_id(self, obj_id) -> object:
+        """Возвращает объект из data по его id"""
+        try:
+            obj_id = int(obj_id)
+            result = None
+            for obj in self.repository.data:
+                if obj.id == obj_id:
+                    result = obj
+                    break
+            return result
+        except ValueError:
+            raise ValueError('Неверно переданные данные')
 
 
 class TaskService(BaseService):
@@ -84,3 +98,24 @@ class TaskService(BaseService):
             )
         ]
         return tasks
+
+    def remove_task_by_id(self, book_id: str) -> Task:
+        """Удаляет задачу по ее id"""
+        try:
+            task = self.get_obj_by_id(book_id)
+            if not task in self.repository.data:
+                raise ValueError(MESSAGE_LEXICON['task_not_found'])
+            self.repository.remove_data_obj(task)
+            return task
+        except ValueError:
+            raise
+
+    def remove_completed_task(self):
+        """Удаляет все завершенные задачи"""
+        completed_task = [task for task in self.repository.data if task.status == TaskStatusEnum.COMPLETED.value]
+        if not completed_task:
+            raise ValueError(MESSAGE_LEXICON['task_not_found'])
+        for task in completed_task:
+            self.repository.data.remove(task)
+        self.repository.write_file()
+        return completed_task

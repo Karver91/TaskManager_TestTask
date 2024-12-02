@@ -1,7 +1,6 @@
-from enum import EnumType
-
 from enums import TaskCategoryEnum, TaskPriorityEnum, TaskStatusEnum
 from lexicon.lexicon_manager import MESSAGE_LEXICON
+from models.task_models import Task
 from services.task_service import TaskService
 from views.view import console
 
@@ -27,6 +26,22 @@ class TaskController:
             ]
             task = self.service.add_task(title, description, due_date, category, priority)
             console.print_message_with_task_info(task, MESSAGE_LEXICON['add_task_success'])
+        except ValueError as e:
+            console.print_exception_message(e)
+            # logger.log_exception(traceback.format_exc())
+
+    def remove_task(self) -> None:
+        """Удаление таски"""
+        try:
+            command_values = [
+                (MESSAGE_LEXICON['delete_by_id'], self.remove_task_by_id),
+                (MESSAGE_LEXICON['delete_completed_tasks'], self.service.remove_completed_task)
+            ]
+            descriptions, methods = zip(*command_values)
+            commands = self.service.get_enumerate_commands(descriptions, methods)
+            selected_command = self.get_user_choice_from_commands(commands)
+            tasks = selected_command['method']()
+            console.print_message(MESSAGE_LEXICON['deleted_success'])
         except ValueError as e:
             console.print_exception_message(e)
             # logger.log_exception(traceback.format_exc())
@@ -116,6 +131,14 @@ class TaskController:
         user_input = self.user_input_command(commands)
         selected_command = commands[user_input]
         return selected_command
+
+    def remove_task_by_id(self) -> Task:
+        """Вызывает удаление задачи по ее id"""
+        try:
+            user_input = console.user_input()
+            return self.service.remove_task_by_id(user_input)
+        except ValueError:
+            raise
 
     @staticmethod
     def user_input_command(commands):

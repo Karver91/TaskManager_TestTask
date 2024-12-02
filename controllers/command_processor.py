@@ -11,7 +11,9 @@ class CommandProcessor:
             'exit': {'method': self.exit_command, 'description': COMMANDS_LEXICON['exit']},
             '1': {'method': self.task_controller.add_task, 'description': COMMANDS_LEXICON['add_task']},
             '2': {'method': self.task_controller.show_tasks, 'description': COMMANDS_LEXICON['show_tasks']},
-            '3': {'method': self.task_controller.search_tasks, 'description': COMMANDS_LEXICON['search_tasks']}
+            '3': {'method': self.task_controller.search_tasks, 'description': COMMANDS_LEXICON['search_tasks']},
+            '4': {'method': self.task_controller.remove_task, 'description': COMMANDS_LEXICON['delete_task']},
+
         }
 
     def process_command(self, command: str) -> None:
