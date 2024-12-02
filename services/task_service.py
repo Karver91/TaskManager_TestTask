@@ -8,9 +8,11 @@ class BaseService:
         self.repository = repository
 
     @staticmethod
-    def get_enumerate_commands(values, cansel_command: bool = False) -> dict[dict]:
+    def get_enumerate_commands(values, methods=None, cansel_command: bool = False) -> dict[dict]:
         """Возвращает список команд для изменения статуса"""
-        commands = {str(key): {'description': value} for key, value in enumerate(values, start=1)}
+        # Создаем вложенный словарь команд, используя генератор словарей
+        commands = {str(key): {'description': value, 'method': methods[key - 1] if methods else None}
+                    for key, value in enumerate(values, start=1)}
         if cansel_command:
             commands['0'] = {'description': MESSAGE_LEXICON['cancel']}
         return commands
@@ -57,3 +59,9 @@ class TaskService(BaseService):
             return task
         except ValueError:
             raise
+
+    def get_all_tasks(self):
+        return self.repository.data
+
+    def get_tasks_by_category(self, category):
+        return [task for task in self.repository.data if task.category == category]

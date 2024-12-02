@@ -25,7 +25,9 @@ __MESSAGE_LEXICON = {
     'cancel': 'Отмена',
     'select_category': 'Выберете категорию',
     'select_priority': 'Выберете приоритет',
-    'invalid_command': 'Введена неверная команда. Попробуйте еще раз'
+    'invalid_command': 'Введена неверная команда. Попробуйте еще раз',
+    'show_all_tasks': 'Просмотр всех текущих задач',
+    'show_tasks_by_category': 'Просмотр задач по категориям'
 }
 
 __ENUMS_LEXICON = {
@@ -41,6 +43,7 @@ __ENUMS_LEXICON = {
 
 __COMMANDS_LEXICON = {
     'add_task': 'Добавить задачу',
+    'show_tasks': 'Показать задачи',
     'help': 'Выводит список команд на экран',
     'exit': 'Выход из приложения'
 }

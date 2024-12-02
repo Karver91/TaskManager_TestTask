@@ -14,17 +14,27 @@ def task_repository(tmp_path):
     # test_file = settings.data_file_path
     repository = JSONFileManager(model=Task, data_path=test_file)
 
-    test_data = Task(
-        id=1,
-        title='test_title',
-        description='test_description',
-        category=TaskCategoryEnum.PERSONAL.value,
-        due_date='3024-10-01',
-        priority=TaskPriorityEnum.LOW.value,
-        status=TaskStatusEnum.NOT_COMPLETED.value
-    )
-
-    repository.add_data_obj(test_data)
+    test_data = [
+        Task(
+            id=1,
+            title='test_title',
+            description='test_description',
+            category=TaskCategoryEnum.PERSONAL.value,
+            due_date='3024-10-01',
+            priority=TaskPriorityEnum.LOW.value,
+            status=TaskStatusEnum.NOT_COMPLETED.value
+        ),
+        Task(
+            id=2,
+            title='test_title',
+            description='test_description',
+            category=TaskCategoryEnum.EDUCATION.value,
+            due_date='3024-10-01',
+            priority=TaskPriorityEnum.MEDIUM.value,
+            status=TaskStatusEnum.NOT_COMPLETED.value
+        )
+    ]
+    [repository.add_data_obj(obj) for obj in test_data]
 
     yield repository
 

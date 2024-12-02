@@ -1,5 +1,6 @@
 import shutil
 
+from config import settings
 from lexicon.lexicon_manager import MESSAGE_LEXICON
 from models.task_models import Task
 
@@ -23,17 +24,27 @@ class ConsoleView:
         len_separator = msg_len if msg_len < terminal_width else terminal_width
         print(f'\n{separator * len_separator}\n{msg_format}\n{separator * len_separator}')
 
+    def print_task_info(self, task: Task):
+        print(
+            f"{task.id:<5} "
+            f"{task.title:<30} "
+            f"{task.category:<15} "
+            f"{task.priority:<15} "
+            f"{task.status:<15} "
+            f"{task.due_date.strftime(settings.DATETIME_FORMAT):<15}"
+        )
+
     @staticmethod
-    def print_task_info(task: Task):
+    def print_task_info_detail(task: Task):
         """Выводит информацию о задаче"""
         print(
-            f"ID: {task.id}\n"
+            f"\nID: {task.id}\n"
             f"{MESSAGE_LEXICON['title']}: {task.title}\n"
             f"{MESSAGE_LEXICON['description']}: {task.description}\n"
             f"{MESSAGE_LEXICON['category']}: {task.category}\n"
             f"{MESSAGE_LEXICON['due_date']}: {task.due_date.date()}\n"
             f"{MESSAGE_LEXICON['priority']}: {task.priority}\n"
-            f"{MESSAGE_LEXICON['status']}: {task.status}\n"
+            f"{MESSAGE_LEXICON['status']}: {task.status}"
         )
 
     def print_task_not_found(self):
@@ -46,7 +57,22 @@ class ConsoleView:
             self.print_task_not_found()
             return
         self.print_message(msg)
-        self.print_task_info(task)
+        self.print_task_info_detail(task)
+
+    def print_tasks(self, tasks: list[Task]):
+        """Выводит список задач"""
+        if not tasks:
+            self.print_task_not_found()
+            return
+        print(f"\n"
+              f"{'ID':<5} "
+              f"{MESSAGE_LEXICON['title']:<30} "
+              f"{MESSAGE_LEXICON['category']:<15} "
+              f"{MESSAGE_LEXICON['priority']:<15} "
+              f"{MESSAGE_LEXICON['status']:<15} "
+              f"{MESSAGE_LEXICON['due_date']:<15}")
+        for task in tasks:
+            self.print_task_info(task)
 
     def print_command_info(self, commands, title_msg: str = None):
         """Выводит доступные команды"""

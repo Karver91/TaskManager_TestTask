@@ -27,6 +27,13 @@ class Task(AbstractModel):
 
         self.validate()
 
+    def __str__(self):
+        return f'<{self.id} {self.title}>'
+
+    def __repr__(self):
+        return f'<{self.id} {self.title}>'
+
+
     def to_dict(self) -> dict:
         return vars(self)
 

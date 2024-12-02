@@ -31,26 +31,49 @@ class TaskController:
             console.print_exception_message(e)
             # logger.log_exception(traceback.format_exc())
 
+    def show_tasks(self):
+        """Отвечает за просмотр задач пользователем"""
+        try:
+            command_values = [
+                (MESSAGE_LEXICON['show_all_tasks'], self.service.get_all_tasks),
+                 (MESSAGE_LEXICON['show_tasks_by_category'], self.get_tasks_by_category)
+            ]
+            descriptions, methods = zip(*command_values)
+            commands = self.service.get_enumerate_commands(descriptions, methods)
+            selected_command = self.get_user_choice_from_commands(commands)
+            tasks = selected_command['method']()
+            console.print_tasks(tasks)
+        except ValueError as e:
+            console.print_exception_message(e)
+            # logger.log_exception(traceback.format_exc())
+
+    def get_tasks_by_category(self):
+        """Возвращает задачи по категориям"""
+        selected_category = self.get_category()
+        return self.service.get_tasks_by_category(selected_category)
+
     def get_category(self) -> str:
         """Предлагает пользователю выбрать категорию таски"""
         commands = self.service.get_enumerate_commands_from_enum(TaskCategoryEnum)
-        return self.get_user_choice_from_commands(
+        selected_command =  self.get_user_choice_from_commands(
             commands, f'{MESSAGE_LEXICON['select_category']}:'
         )
+        return selected_command['description']
 
     def get_priority(self):
         """Предлагает пользователю выбрать приоритет таски"""
         commands = self.service.get_enumerate_commands_from_enum(TaskPriorityEnum)
-        return self.get_user_choice_from_commands(
+        selected_command = self.get_user_choice_from_commands(
             commands, f'{MESSAGE_LEXICON['select_priority']}:'
         )
+        return selected_command['description']
 
-    def get_user_choice_from_commands(self, commands: dict[dict], title_msg: str) -> str:
+    def get_user_choice_from_commands(self, commands: dict[dict], title_msg: str = None) -> dict[dict]:
         """Возвращает значение, которое выбрал пользователь из списка команд"""
         console.print_command_info(commands, title_msg=title_msg)
         user_input = self.user_input_command(commands)
-        status = commands[user_input]['description']
-        return status
+        selected_command = commands[user_input]
+        return selected_command
 
     @staticmethod
     def user_input_command(commands):
