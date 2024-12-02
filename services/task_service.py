@@ -63,5 +63,24 @@ class TaskService(BaseService):
     def get_all_tasks(self):
         return self.repository.data
 
-    def get_tasks_by_category(self, category):
-        return [task for task in self.repository.data if task.category == category]
+    def get_tasks_by_task_attr(self, attr, keyword) -> list[Task]:
+        try:
+            return [task for task in self.repository.data if getattr(task, attr) == keyword]
+        except AttributeError:
+            raise AttributeError(f'Ошибка: атрибут "{keyword}" не найден')
+
+    def get_tasks_by_task_keyword(self, user_input: str) -> list[Task]:
+        """Ищет задачи по их названию, описанию, категории, приоритету и статусу"""
+        keywords = user_input.split()
+        tasks = [
+            task for task in self.repository.data if (
+                word.lower() in keywords for word in (
+                    task.title,
+                    task.description,
+                    task.category,
+                    task.priority,
+                    task.status
+                )
+            )
+        ]
+        return tasks

@@ -25,9 +25,15 @@ __MESSAGE_LEXICON = {
     'cancel': 'Отмена',
     'select_category': 'Выберете категорию',
     'select_priority': 'Выберете приоритет',
+    'select_status': 'Выберете статус',
     'invalid_command': 'Введена неверная команда. Попробуйте еще раз',
     'show_all_tasks': 'Просмотр всех текущих задач',
-    'show_tasks_by_category': 'Просмотр задач по категориям'
+    'show_tasks_by_category': 'Просмотр задач по категориям',
+    'search_by_keyword': 'Поиск задач по ключевому слову',
+    'search_by_category': 'Поиск задач по категории',
+    'search_by_priority': 'Поиск задач по приоритету',
+    'search_by_status': 'Поиск задач по статусу выполнения',
+    'search_by_keyword_info': 'Ключевым словом может быть название задачи, описание, категория, приоритет или статус'
 }
 
 __ENUMS_LEXICON = {
@@ -44,6 +50,7 @@ __ENUMS_LEXICON = {
 __COMMANDS_LEXICON = {
     'add_task': 'Добавить задачу',
     'show_tasks': 'Показать задачи',
+    'search_tasks': 'Поиск задач',
     'help': 'Выводит список команд на экран',
     'exit': 'Выход из приложения'
 }

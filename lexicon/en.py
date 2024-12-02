@@ -26,9 +26,15 @@ __MESSAGE_LEXICON = {
     'cancel': 'Cancel',
     'select_category': 'Select category',
     'select_priority': 'Select priority',
+    'select_status': 'Select status',
     'invalid_command': 'Invalid command entered. Try again',
     'show_all_tasks': 'View all current tasks',
-    'show_tasks_by_category': 'View tasks by category'
+    'show_tasks_by_category': 'View tasks by category',
+    'search_by_keyword': 'Search for a task by keyword',
+    'search_by_category': 'Search tasks by category',
+    'search_by_priority': 'Search tasks by priority',
+    'search_by_status': 'Search tasks by completion status',
+    'search_by_keyword_info': 'The keyword can be the task name, description, category, priority, or status'
 }
 
 __ENUMS_LEXICON = {
@@ -45,6 +51,7 @@ __ENUMS_LEXICON = {
 __COMMANDS_LEXICON = {
     'add_task': 'Add task',
     'show_tasks': 'Show tasks',
+    'search_tasks': 'Search for tasks',
     'help': 'Displays a list of commands on the screen',
     'exit': 'Exit the application'
 }

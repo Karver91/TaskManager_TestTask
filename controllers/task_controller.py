@@ -1,6 +1,6 @@
 from enum import EnumType
 
-from enums import TaskCategoryEnum, TaskPriorityEnum
+from enums import TaskCategoryEnum, TaskPriorityEnum, TaskStatusEnum
 from lexicon.lexicon_manager import MESSAGE_LEXICON
 from services.task_service import TaskService
 from views.view import console
@@ -47,10 +47,44 @@ class TaskController:
             console.print_exception_message(e)
             # logger.log_exception(traceback.format_exc())
 
+    def search_tasks(self):
+        """Отвечает за поиск задач пользователем"""
+        try:
+            command_values = [
+                (MESSAGE_LEXICON['search_by_keyword'], self.get_tasks_by_keyword),
+                (MESSAGE_LEXICON['search_by_category'], self.get_tasks_by_category),
+                (MESSAGE_LEXICON['search_by_priority'], self.get_tasks_by_priority),
+                (MESSAGE_LEXICON['search_by_status'], self.get_task_by_status)
+            ]
+            descriptions, methods = zip(*command_values)
+            commands = self.service.get_enumerate_commands(descriptions, methods)
+            selected_command = self.get_user_choice_from_commands(commands)
+            tasks = selected_command['method']()
+            console.print_tasks(tasks)
+        except ValueError as e:
+            console.print_exception_message(e)
+            # logger.log_exception(traceback.format_exc())
+
+    def get_tasks_by_keyword(self):
+        """Возвращает задачи по ключевому слову"""
+        console.print_message(MESSAGE_LEXICON['search_by_keyword_info'])
+        user_input = console.user_input()
+        return self.service.get_tasks_by_task_keyword(user_input)
+
     def get_tasks_by_category(self):
         """Возвращает задачи по категориям"""
         selected_category = self.get_category()
-        return self.service.get_tasks_by_category(selected_category)
+        return self.service.get_tasks_by_task_attr(attr='category', keyword=selected_category)
+
+    def get_tasks_by_priority(self):
+        """Возвращает задачи по приоритету"""
+        selected_category = self.get_priority()
+        return self.service.get_tasks_by_task_attr(attr='priority', keyword=selected_category)
+
+    def get_task_by_status(self):
+        """Возвращает задачи по статусу"""
+        selected_category = self.get_status()
+        return self.service.get_tasks_by_task_attr(attr='status', keyword=selected_category)
 
     def get_category(self) -> str:
         """Предлагает пользователю выбрать категорию таски"""
@@ -65,6 +99,14 @@ class TaskController:
         commands = self.service.get_enumerate_commands_from_enum(TaskPriorityEnum)
         selected_command = self.get_user_choice_from_commands(
             commands, f'{MESSAGE_LEXICON['select_priority']}:'
+        )
+        return selected_command['description']
+
+    def get_status(self):
+        """Предлагает пользователю выбрать статус таски"""
+        commands = self.service.get_enumerate_commands_from_enum(TaskStatusEnum)
+        selected_command = self.get_user_choice_from_commands(
+            commands, f'{MESSAGE_LEXICON['select_status']}:'
         )
         return selected_command['description']
 

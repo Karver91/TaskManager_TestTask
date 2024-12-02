@@ -10,7 +10,8 @@ class CommandProcessor:
             'help': {'method': self.help_command, 'description': COMMANDS_LEXICON['help']},
             'exit': {'method': self.exit_command, 'description': COMMANDS_LEXICON['exit']},
             '1': {'method': self.task_controller.add_task, 'description': COMMANDS_LEXICON['add_task']},
-            '2': {'method': self.task_controller.show_tasks, 'description': COMMANDS_LEXICON['show_tasks']}
+            '2': {'method': self.task_controller.show_tasks, 'description': COMMANDS_LEXICON['show_tasks']},
+            '3': {'method': self.task_controller.search_tasks, 'description': COMMANDS_LEXICON['search_tasks']}
         }
 
     def process_command(self, command: str) -> None:
