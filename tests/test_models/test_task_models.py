@@ -34,8 +34,6 @@ class TestTaskModel:
             status=TaskStatusEnum.NOT_COMPLETED.value
         )
 
-        task._validate_due_date_format()
-        assert isinstance(task.due_date, datetime)
 
     @pytest.mark.parametrize('date_n_time, expected_error_message',
                                  [

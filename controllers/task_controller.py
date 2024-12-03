@@ -1,5 +1,5 @@
 from enums import TaskCategoryEnum, TaskPriorityEnum, TaskStatusEnum
-from lexicon.lexicon_manager import MESSAGE_LEXICON
+from lexicon.lexicon_manager import MESSAGE_LEXICON, COMMANDS_LEXICON
 from models.task_models import Task
 from services.task_service import TaskService
 from views.view import console
@@ -34,24 +34,47 @@ class TaskController:
         """Удаление таски"""
         try:
             command_values = [
-                (MESSAGE_LEXICON['delete_by_id'], self.remove_task_by_id),
-                (MESSAGE_LEXICON['delete_completed_tasks'], self.service.remove_completed_task)
+                (COMMANDS_LEXICON['delete_by_id'], self.remove_task_by_id),
+                (COMMANDS_LEXICON['delete_completed_tasks'], self.service.remove_completed_task)
             ]
             descriptions, methods = zip(*command_values)
             commands = self.service.get_enumerate_commands(descriptions, methods)
             selected_command = self.get_user_choice_from_commands(commands)
-            tasks = selected_command['method']()
+            selected_command['method']()
             console.print_message(MESSAGE_LEXICON['deleted_success'])
         except ValueError as e:
             console.print_exception_message(e)
             # logger.log_exception(traceback.format_exc())
 
+    def edit_task(self):
+        """Отвечает за редактирование задачи"""
+        try:
+            user_input = console.user_input(MESSAGE_LEXICON['enter_id'])
+            task = self.service.get_obj_by_id(user_input)
+            command_values = [
+                (COMMANDS_LEXICON['title'], self.edit_title),
+                (COMMANDS_LEXICON['description'], self.edit_description),
+                (COMMANDS_LEXICON['category'], self.edit_category),
+                (COMMANDS_LEXICON['due_date'], self.edit_due_date),
+                (COMMANDS_LEXICON['priority'], self.edit_priority),
+                (COMMANDS_LEXICON['status'], self.edit_status)
+            ]
+            descriptions, methods = zip(*command_values)
+            commands = self.service.get_enumerate_commands(descriptions, methods)
+            selected_command = self.get_user_choice_from_commands(commands)
+            selected_command['method'](task)
+            console.print_message_with_task_info(task, MESSAGE_LEXICON['edit_task_success'])
+        except ValueError as e:
+            console.print_exception_message(e)
+            # logger.log_exception(traceback.format_exc())
+
+
     def show_tasks(self):
         """Отвечает за просмотр задач пользователем"""
         try:
             command_values = [
-                (MESSAGE_LEXICON['show_all_tasks'], self.service.get_all_tasks),
-                 (MESSAGE_LEXICON['show_tasks_by_category'], self.get_tasks_by_category)
+                (COMMANDS_LEXICON['show_all_tasks'], self.service.get_all_tasks),
+                 (COMMANDS_LEXICON['show_tasks_by_category'], self.get_tasks_by_category)
             ]
             descriptions, methods = zip(*command_values)
             commands = self.service.get_enumerate_commands(descriptions, methods)
@@ -66,10 +89,10 @@ class TaskController:
         """Отвечает за поиск задач пользователем"""
         try:
             command_values = [
-                (MESSAGE_LEXICON['search_by_keyword'], self.get_tasks_by_keyword),
-                (MESSAGE_LEXICON['search_by_category'], self.get_tasks_by_category),
-                (MESSAGE_LEXICON['search_by_priority'], self.get_tasks_by_priority),
-                (MESSAGE_LEXICON['search_by_status'], self.get_task_by_status)
+                (COMMANDS_LEXICON['search_by_keyword'], self.get_tasks_by_keyword),
+                (COMMANDS_LEXICON['search_by_category'], self.get_tasks_by_category),
+                (COMMANDS_LEXICON['search_by_priority'], self.get_tasks_by_priority),
+                (COMMANDS_LEXICON['search_by_status'], self.get_task_by_status)
             ]
             descriptions, methods = zip(*command_values)
             commands = self.service.get_enumerate_commands(descriptions, methods)
@@ -137,6 +160,54 @@ class TaskController:
         try:
             user_input = console.user_input()
             return self.service.remove_task_by_id(user_input)
+        except ValueError:
+            raise
+
+    def edit_title(self, task_obj):
+        """Редактирование названия задачи"""
+        try:
+            user_input = console.user_input(MESSAGE_LEXICON['input_task_title'])
+            return self.service.edit_task('title', task_obj, user_input)
+        except ValueError:
+            raise
+
+    def edit_description(self, task_obj):
+        """Редактирование описания задачи"""
+        try:
+            user_input = console.user_input(MESSAGE_LEXICON['input_task_description'])
+            return self.service.edit_task('description', task_obj, user_input)
+        except ValueError:
+            raise
+
+    def edit_category(self, task_obj):
+        """Редактирование категории задачи"""
+        try:
+            category = self.get_category()
+            return self.service.edit_task('category', task_obj, category)
+        except ValueError:
+            raise
+
+    def edit_due_date(self, task_obj):
+        """Редактирование даты выполнения задачи"""
+        try:
+            user_input = console.user_input(MESSAGE_LEXICON['input_task_date'])
+            return self.service.edit_task('due_date', task_obj, user_input)
+        except ValueError:
+            raise
+
+    def edit_priority(self, task_obj):
+        """Редактирование приоритета выполнения задачи"""
+        try:
+            priority = self.get_priority()
+            return self.service.edit_task('priority', task_obj, priority)
+        except ValueError:
+            raise
+
+    def edit_status(self, task_obj):
+        """Редактирование статуса выполнения задачи"""
+        try:
+            status = self.get_status()
+            return self.service.edit_task('status', task_obj, status)
         except ValueError:
             raise
 

@@ -9,11 +9,11 @@ class CommandProcessor:
         self.commands = {
             'help': {'method': self.help_command, 'description': COMMANDS_LEXICON['help']},
             'exit': {'method': self.exit_command, 'description': COMMANDS_LEXICON['exit']},
-            '1': {'method': self.task_controller.add_task, 'description': COMMANDS_LEXICON['add_task']},
-            '2': {'method': self.task_controller.show_tasks, 'description': COMMANDS_LEXICON['show_tasks']},
-            '3': {'method': self.task_controller.search_tasks, 'description': COMMANDS_LEXICON['search_tasks']},
+            '1': {'method': self.task_controller.show_tasks, 'description': COMMANDS_LEXICON['show_tasks']},
+            '2': {'method': self.task_controller.search_tasks, 'description': COMMANDS_LEXICON['search_tasks']},
+            '3': {'method': self.task_controller.add_task, 'description': COMMANDS_LEXICON['add_task']},
             '4': {'method': self.task_controller.remove_task, 'description': COMMANDS_LEXICON['delete_task']},
-
+            '5': {'method': self.task_controller.edit_task, 'description': COMMANDS_LEXICON['edit_task']},
         }
 
     def process_command(self, command: str) -> None:
@@ -35,6 +35,7 @@ class CommandProcessor:
             console.print_command_info(self.commands)
             while True:
                 console.print_help_command_info()
+                console.print_main_menu_label()
                 user_input = console.user_input().lower()
                 self.process_command(user_input)
         except KeyboardInterrupt:

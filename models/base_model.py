@@ -7,5 +7,5 @@ class AbstractModel(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def validate(self):
+    def validate(self, name, value):
         raise NotImplementedError

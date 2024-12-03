@@ -1,5 +1,5 @@
 from enums import TaskStatusEnum
-from lexicon.lexicon_manager import MESSAGE_LEXICON
+from lexicon.lexicon_manager import MESSAGE_LEXICON, EXCEPTION_LEXICON
 from models.task_models import Task
 from repository.file_manager import BaseFileManager
 
@@ -47,9 +47,14 @@ class BaseService:
                 if obj.id == obj_id:
                     result = obj
                     break
+            if not result:
+                raise ValueError(EXCEPTION_LEXICON['repository_object_not_found'])
             return result
-        except ValueError:
-            raise ValueError('Неверно переданные данные')
+        except ValueError as e:
+            if str(e) == EXCEPTION_LEXICON['repository_object_not_found']:
+                raise
+            else:
+                raise ValueError(EXCEPTION_LEXICON['repository_bad_request'])
 
 
 class TaskService(BaseService):
@@ -99,12 +104,10 @@ class TaskService(BaseService):
         ]
         return tasks
 
-    def remove_task_by_id(self, book_id: str) -> Task:
+    def remove_task_by_id(self, task_id: str) -> Task:
         """Удаляет задачу по ее id"""
         try:
-            task = self.get_obj_by_id(book_id)
-            if not task in self.repository.data:
-                raise ValueError(MESSAGE_LEXICON['task_not_found'])
+            task = self.get_obj_by_id(task_id)
             self.repository.remove_data_obj(task)
             return task
         except ValueError:
@@ -114,8 +117,15 @@ class TaskService(BaseService):
         """Удаляет все завершенные задачи"""
         completed_task = [task for task in self.repository.data if task.status == TaskStatusEnum.COMPLETED.value]
         if not completed_task:
-            raise ValueError(MESSAGE_LEXICON['task_not_found'])
+            raise ValueError(EXCEPTION_LEXICON['task_not_found'])
         for task in completed_task:
             self.repository.data.remove(task)
         self.repository.write_file()
         return completed_task
+
+    def edit_task(self, attr, obj, value):
+        try:
+            setattr(obj, attr, value)
+            self.repository.write_file()
+        except ValueError:
+            raise

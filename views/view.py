@@ -1,7 +1,7 @@
 import shutil
 
 from config import settings
-from lexicon.lexicon_manager import MESSAGE_LEXICON
+from lexicon.lexicon_manager import MESSAGE_LEXICON, EXCEPTION_LEXICON, COMMANDS_LEXICON
 from models.task_models import Task
 
 
@@ -40,17 +40,17 @@ class ConsoleView:
         """Выводит подробную информацию о задаче"""
         print(
             f"\nID: {task.id}\n"
-            f"{MESSAGE_LEXICON['title']}: {task.title}\n"
-            f"{MESSAGE_LEXICON['description']}: {task.description}\n"
-            f"{MESSAGE_LEXICON['category']}: {task.category}\n"
-            f"{MESSAGE_LEXICON['due_date']}: {task.due_date.date()}\n"
-            f"{MESSAGE_LEXICON['priority']}: {task.priority}\n"
-            f"{MESSAGE_LEXICON['status']}: {task.status}"
+            f"{COMMANDS_LEXICON['title']}: {task.title}\n"
+            f"{COMMANDS_LEXICON['description']}: {task.description}\n"
+            f"{COMMANDS_LEXICON['category']}: {task.category}\n"
+            f"{COMMANDS_LEXICON['due_date']}: {task.due_date.date()}\n"
+            f"{COMMANDS_LEXICON['priority']}: {task.priority}\n"
+            f"{COMMANDS_LEXICON['status']}: {task.status}"
         )
 
     def print_task_not_found(self):
         """Выводит сообщение, если задача не найдена"""
-        self.print_message(MESSAGE_LEXICON['task_not_found'])
+        self.print_message(EXCEPTION_LEXICON['task_not_found'])
 
 
     def print_message_with_task_info(self, task, msg):
@@ -68,11 +68,11 @@ class ConsoleView:
             return
         print(f"\n"
               f"{'ID':<5} "
-              f"{MESSAGE_LEXICON['title']:<30} "
-              f"{MESSAGE_LEXICON['category']:<15} "
-              f"{MESSAGE_LEXICON['priority']:<15} "
-              f"{MESSAGE_LEXICON['status']:<15} "
-              f"{MESSAGE_LEXICON['due_date']:<15}")
+              f"{COMMANDS_LEXICON['title']:<30} "
+              f"{COMMANDS_LEXICON['category']:<15} "
+              f"{COMMANDS_LEXICON['priority']:<15} "
+              f"{COMMANDS_LEXICON['status']:<15} "
+              f"{COMMANDS_LEXICON['due_date']:<15}")
         for task in tasks:
             self.print_task_info(task)
 
@@ -83,6 +83,9 @@ class ConsoleView:
         self.print_message(title_msg)
         for key, value in commands.items():
             print(f'{key} - {value['description']}')
+
+    def print_main_menu_label(self):
+        print(MESSAGE_LEXICON['main_menu_label'])
 
     def print_help_command_info(self):
         self.print_message(MESSAGE_LEXICON['help_command_info'])
