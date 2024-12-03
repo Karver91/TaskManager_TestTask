@@ -2,7 +2,7 @@
 Тестовое задание: Разработка консольного приложения "Менеджер задач"
 
 ## Структура проекта
-'''
+```
 TaskManager_TestTask/
     ├── controllers/
         ├── command_processor.py      # Принимает команды, вызывает контроллеры
@@ -22,4 +22,4 @@ TaskManager_TestTask/
     ├── config.py
     ├── enums.py
     └── main.py
-    '''
+```
