@@ -33,7 +33,7 @@ class TestTaskModel:
             priority=TaskPriorityEnum.LOW.value,
             status=TaskStatusEnum.NOT_COMPLETED.value
         )
-
+        assert isinstance(task.due_date, datetime)
 
     @pytest.mark.parametrize('date_n_time, expected_error_message',
                                  [

@@ -158,7 +158,7 @@ class TaskController:
     def remove_task_by_id(self) -> Task:
         """Вызывает удаление задачи по ее id"""
         try:
-            user_input = console.user_input()
+            user_input = console.user_input(MESSAGE_LEXICON['enter_id'])
             return self.service.remove_task_by_id(user_input)
         except ValueError:
             raise

@@ -92,14 +92,11 @@ class TaskService(BaseService):
         """Ищет задачи по их названию, описанию, категории, приоритету и статусу"""
         keywords = user_input.split()
         tasks = [
-            task for task in self.repository.data if (
-                word.lower() in keywords for word in (
-                    task.title,
-                    task.description,
-                    task.category,
-                    task.priority,
-                    task.status
-                )
+            task for task in self.repository.data
+            if any(
+                keyword.lower() in word.lower()
+                for word in (task.title, task.description, task.category, task.priority, task.status)
+                for keyword in keywords
             )
         ]
         return tasks
