@@ -6,18 +6,20 @@ import pytest
 
 from config import settings
 from enums import TaskCategoryEnum, TaskPriorityEnum, TaskStatusEnum
-from lexicon.lexicon_manager import MESSAGE_LEXICON
+from lexicon.lexicon_manager import MESSAGE_LEXICON, ENUMS_LEXICON
 from models.task_models import Task
 from views.view import console
 
+DATE_FORMAT = settings.DATETIME_FORMAT
+DATE_STR = DATE_FORMAT.replace('%Y', '2025').replace('%m', '12').replace('%d', '12')
+DATE_OBJ = datetime.strptime(DATE_STR, DATE_FORMAT)
 
 class TestTaskController:
     def test_add_task(self, task_controller):
         repository_data = task_controller.service.repository.data
         expected_data_len = len(repository_data) + 1
 
-        date_format = settings.DATETIME_FORMAT
-        date = date_format.replace('%Y', '2025').replace('%m', '12').replace('%d', '12')
+        date = DATE_STR
         category_input = random.randint(1, len(TaskCategoryEnum))
         priority_input = random.randint(1, len(TaskPriorityEnum))
         console_input = {
@@ -43,7 +45,7 @@ class TestTaskController:
         # Проверяем соответствие полям
         assert new_obj.title == console_input['title']
         assert new_obj.description == console_input['description']
-        assert new_obj.due_date == datetime.strptime(console_input['due_date'], date_format)
+        assert new_obj.due_date == DATE_OBJ
         assert new_obj.category == list(TaskCategoryEnum)[category_input -1].value
         assert new_obj.priority == list(TaskPriorityEnum)[priority_input -1].value
         assert new_obj.status == TaskStatusEnum.NOT_COMPLETED.value
@@ -75,3 +77,36 @@ class TestTaskController:
                 mock_print.assert_any_call(expected_result)
 
         assert len(repository_data) == expected_data_len, 'Объект не удален из базы'
+
+    @pytest.mark.parametrize('edit_field_command, user_input, expected_data, task_attr',
+                             [
+                                 ('1', 'new title', 'new title', 'title'),
+                                 ('2', 'new description', 'new description', 'description'),
+                                 ('3', '1', ENUMS_LEXICON['WORK'], 'category'),
+                                 ('4', DATE_STR, DATE_OBJ, 'due_date'),
+                                 ('5', '1', ENUMS_LEXICON['HIGH'], 'priority'),
+                                 ('6', '1', ENUMS_LEXICON['COMPLETED'], 'status')
+                             ])
+    def test_edit_task(self, task_controller,
+                       edit_field_command, user_input, expected_data, task_attr):
+        repository_data = task_controller.service.repository.data
+        task_id = 1
+        console_input = {
+            'task_id': str(task_id),
+            'edit_field_command': edit_field_command,
+            'user_input': user_input
+        }
+        task: Task = [task for task in repository_data if task.id == task_id][0]
+
+        with patch('builtins.print') as mock_print:
+            console.print_message(MESSAGE_LEXICON['edit_task_success'])
+            expected_result = mock_print.call_args.args[0]
+
+        with patch('builtins.print') as mock_print:
+            with patch('builtins.input', side_effect=console_input.values()):
+                # Вызываем метод
+                task_controller.edit_task()
+                # Проверяем вывод на экран
+                mock_print.assert_any_call(expected_result)
+
+        assert getattr(task, task_attr) == expected_data
