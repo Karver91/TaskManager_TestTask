@@ -110,3 +110,53 @@ class TestTaskController:
                 mock_print.assert_any_call(expected_result)
 
         assert getattr(task, task_attr) == expected_data
+
+    def test_show_all_tasks(self, task_controller):
+        repository_data = task_controller.service.repository.data
+        data_len = len(repository_data)
+        console_input = {
+            'show_task_command': '1'
+        }
+        with patch('builtins.print') as mock_print:
+            console.print_tasks(repository_data)
+            data = mock_print.call_args_list[-data_len:]
+            expected_result = [obj.args for obj in data]
+
+        with patch('builtins.print') as mock_print:
+            with patch('builtins.input', side_effect=console_input.values()):
+                # Вызываем метод
+                task_controller.show_tasks()
+                # Проверяем вывод на экран
+                data = mock_print.call_args_list[-data_len:]
+                displayed_result = [obj.args for obj in data]
+                assert expected_result == displayed_result
+
+
+    def test_show_tasks_by_category(self, task_controller):
+        category_choice = '2'
+        console_input = {
+            'show_task_command': '2',
+            'category_choice': category_choice
+        }
+
+        # Получаем название категории
+        with patch('builtins.input', side_effect=[category_choice]):
+            category = task_controller.get_category()
+
+        expected_data = [task for task in task_controller.service.repository.data if task.category == category]
+        data_len = len(expected_data)
+
+        # Получаем ожидаемый вывод на экран
+        with patch('builtins.print') as mock_print:
+            console.print_tasks(expected_data)
+            data = mock_print.call_args_list[-data_len:]
+            expected_result = [obj.args for obj in data]
+
+        with patch('builtins.print') as mock_print:
+            with patch('builtins.input', side_effect=console_input.values()):
+                # Вызываем метод
+                task_controller.show_tasks()
+                # Проверяем вывод на экран
+                data = mock_print.call_args_list[-data_len:]
+                displayed_result = [obj.args for obj in data]
+                assert expected_result == displayed_result

@@ -17,7 +17,7 @@ class ConsoleView:
         """Выводит сообщение об ошибке"""
         terminal_width = self.__get_terminal_width()
 
-        msg_format = f'!!!{message}!!!'
+        msg_format = f'| {message} |'
         msg_len = len(msg_format)
         separator = '-'
 
