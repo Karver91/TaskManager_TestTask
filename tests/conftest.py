@@ -27,7 +27,7 @@ def task_repository(tmp_path):
         Task(
             id=2,
             title='test_title',
-            description='test_description',
+            description='description',
             category=TaskCategoryEnum.EDUCATION.value,
             due_date='3024-10-01',
             priority=TaskPriorityEnum.MEDIUM.value,

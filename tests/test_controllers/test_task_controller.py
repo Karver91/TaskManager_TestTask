@@ -14,6 +14,7 @@ DATE_FORMAT = settings.DATETIME_FORMAT
 DATE_STR = DATE_FORMAT.replace('%Y', '2025').replace('%m', '12').replace('%d', '12')
 DATE_OBJ = datetime.strptime(DATE_STR, DATE_FORMAT)
 
+
 class TestTaskController:
     def test_add_task(self, task_controller):
         repository_data = task_controller.service.repository.data
@@ -46,8 +47,8 @@ class TestTaskController:
         assert new_obj.title == console_input['title']
         assert new_obj.description == console_input['description']
         assert new_obj.due_date == DATE_OBJ
-        assert new_obj.category == list(TaskCategoryEnum)[category_input -1].value
-        assert new_obj.priority == list(TaskPriorityEnum)[priority_input -1].value
+        assert new_obj.category == list(TaskCategoryEnum)[category_input - 1].value
+        assert new_obj.priority == list(TaskPriorityEnum)[priority_input - 1].value
         assert new_obj.status == TaskStatusEnum.NOT_COMPLETED.value
 
     @pytest.mark.parametrize('delete_task_command, task_id',
@@ -131,7 +132,6 @@ class TestTaskController:
                 displayed_result = [obj.args for obj in data]
                 assert expected_result == displayed_result
 
-
     def test_show_tasks_by_category(self, task_controller):
         category_choice = '2'
         console_input = {
@@ -156,6 +156,31 @@ class TestTaskController:
             with patch('builtins.input', side_effect=console_input.values()):
                 # Вызываем метод
                 task_controller.show_tasks()
+                # Проверяем вывод на экран
+                data = mock_print.call_args_list[-data_len:]
+                displayed_result = [obj.args for obj in data]
+                assert expected_result == displayed_result
+
+    def test_search_tasks_by_keyword(self, task_controller):
+        repository_data = task_controller.service.repository.data
+        keyword = repository_data[0].description
+        console_input = {
+            'search_task_command': '1',
+            'user_input': keyword
+        }
+        expected_data = [obj for obj in repository_data if keyword in obj.description]
+        data_len = len(expected_data)
+
+        # Получаем ожидаемый вывод на экран
+        with patch('builtins.print') as mock_print:
+            console.print_tasks(expected_data)
+            data = mock_print.call_args_list[-data_len:]
+            expected_result = [obj.args for obj in data]
+
+        with patch('builtins.print') as mock_print:
+            with patch('builtins.input', side_effect=console_input.values()):
+                # Вызываем метод
+                task_controller.search_tasks()
                 # Проверяем вывод на экран
                 data = mock_print.call_args_list[-data_len:]
                 displayed_result = [obj.args for obj in data]
