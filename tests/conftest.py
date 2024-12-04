@@ -1,10 +1,17 @@
+from datetime import datetime
+
 import pytest
 
+from config import settings
 from controllers.task_controller import TaskController
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.task_models import Task
 from repository.file_manager import JSONFileManager
 from services.task_service import TaskService
+
+DATE_FORMAT = settings.DATETIME_FORMAT
+DATE_STR = DATE_FORMAT.replace('%Y', '2025').replace('%m', '12').replace('%d', '12')
+DATE_OBJ = datetime.strptime(DATE_STR, DATE_FORMAT)
 
 
 @pytest.fixture
@@ -20,7 +27,7 @@ def task_repository(tmp_path):
             title='test_title',
             description='test_description',
             category=TaskCategoryEnum.PERSONAL.value,
-            due_date='3024-10-01',
+            due_date=DATE_STR,
             priority=TaskPriorityEnum.LOW.value,
             status=TaskStatusEnum.NOT_COMPLETED.value
         ),
@@ -29,7 +36,7 @@ def task_repository(tmp_path):
             title='test_title',
             description='description',
             category=TaskCategoryEnum.EDUCATION.value,
-            due_date='3024-10-01',
+            due_date=DATE_STR,
             priority=TaskPriorityEnum.MEDIUM.value,
             status=TaskStatusEnum.NOT_COMPLETED.value
         )

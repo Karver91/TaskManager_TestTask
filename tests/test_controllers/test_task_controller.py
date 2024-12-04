@@ -8,11 +8,9 @@ from config import settings
 from enums import TaskCategoryEnum, TaskPriorityEnum, TaskStatusEnum
 from lexicon.lexicon_manager import MESSAGE_LEXICON, ENUMS_LEXICON
 from models.task_models import Task
+from tests.conftest import DATE_STR, DATE_OBJ
 from views.view import console
 
-DATE_FORMAT = settings.DATETIME_FORMAT
-DATE_STR = DATE_FORMAT.replace('%Y', '2025').replace('%m', '12').replace('%d', '12')
-DATE_OBJ = datetime.strptime(DATE_STR, DATE_FORMAT)
 
 
 class TestTaskController:

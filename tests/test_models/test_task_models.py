@@ -5,6 +5,7 @@ import pytest
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from lexicon.lexicon_manager import EXCEPTION_LEXICON
 from models.task_models import Task
+from tests.conftest import DATE_STR
 
 
 class TestTaskModel:
@@ -23,7 +24,7 @@ class TestTaskModel:
         assert task.to_dict() == expected_dict
 
     def test_validate_due_date_format(self):
-        date_n_time = '3024-11-11'
+        date_n_time = DATE_STR
         task = Task(
             id=1,
             title='test_title',
