@@ -7,6 +7,8 @@ from models.base_model import AbstractModel
 
 
 class Task(AbstractModel):
+    __slots__ = ('id', 'title', 'description', 'category', 'due_date', 'priority', 'status')
+
     def __init__(
             self,
             id: int,
@@ -26,8 +28,6 @@ class Task(AbstractModel):
         self.status = TaskStatusEnum.NOT_COMPLETED.value if not status else status
 
     def __setattr__(self, key, value):
-        if not key in ['id', 'title', 'description', 'category', 'due_date', 'priority', 'status']:
-            raise AttributeError(EXCEPTION_LEXICON['attr_not_exist'])
         value = self.validate(key, value)
         super().__setattr__(key, value)
 
@@ -39,7 +39,16 @@ class Task(AbstractModel):
 
 
     def to_dict(self) -> dict:
-        return vars(self)
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'category': self.category,
+            'priority': self.priority,
+            'due_date': self.due_date,
+            'status': self.status
+        }
+
 
     def validate(self, key, value):
         if key == 'id':
