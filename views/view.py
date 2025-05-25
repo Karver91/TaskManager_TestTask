@@ -43,7 +43,7 @@ class ConsoleView:
             f"{COMMANDS_LEXICON['title']}: {task.title}\n"
             f"{COMMANDS_LEXICON['description']}: {task.description}\n"
             f"{COMMANDS_LEXICON['category']}: {task.category}\n"
-            f"{COMMANDS_LEXICON['due_date']}: {task.due_date.date()}\n"
+            f"{COMMANDS_LEXICON['due_date']}: {task.due_date}\n"
             f"{COMMANDS_LEXICON['priority']}: {task.priority}\n"
             f"{COMMANDS_LEXICON['status']}: {task.status}"
         )

@@ -52,8 +52,7 @@ class Task(AbstractModel):
 
     def validate(self, key, value):
         if key == 'id':
-            if not isinstance(value, int) or value < 0:
-                raise ValueError(EXCEPTION_LEXICON['models_id_not_valid'])
+            value = self.__validate_id(value)
         elif key in ('title', 'description', 'category', 'priority', 'status'):
             self.__validate_len_value(value)
         elif key == 'due_date':
@@ -66,8 +65,8 @@ class Task(AbstractModel):
         try:
             if isinstance(value, str):
                 value = value.strip()
-                value = datetime.strptime(value, settings.DATETIME_FORMAT)
-                return value
+                value = datetime.strptime(value, settings.DATETIME_FORMAT).date()
+            return value
         except ValueError as e:
             raise ValueError(EXCEPTION_LEXICON['models_date_format_not_valid'])
 
@@ -79,3 +78,15 @@ class Task(AbstractModel):
     # def validate_date_not_less_current(self):
     #     if self.due_date < datetime.now():
     #         raise ValueError(EXCEPTION_LEXICON['models_date_must_be_less_current'])
+
+
+    @staticmethod
+    def __validate_id(value):
+        try:
+            if not isinstance(value, int):
+                value = int(value)
+            if value <= 0:
+                raise ValueError
+            return value
+        except ValueError:
+            raise ValueError(EXCEPTION_LEXICON['models_id_not_valid'])

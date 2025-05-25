@@ -6,20 +6,22 @@ from config import settings
 from controllers.task_controller import TaskController
 from enums import TaskCategoryEnum, TaskStatusEnum, TaskPriorityEnum
 from models.task_models import Task
-from repository.file_manager import JSONFileManager
+from repository.file_manager import JSONFileManager, CSVFileManager
 from services.task_service import TaskService
 
 DATE_FORMAT = settings.DATETIME_FORMAT
 DATE_STR = DATE_FORMAT.replace('%Y', '2025').replace('%m', '12').replace('%d', '12')
-DATE_OBJ = datetime.strptime(DATE_STR, DATE_FORMAT)
+DATE_OBJ = datetime.strptime(DATE_STR, DATE_FORMAT).date()
 
 
 @pytest.fixture
 def task_repository(tmp_path):
     """Фикстура для создания тестового JSON-файла."""
-    test_file = tmp_path / "test_data.json"
+    test_file = tmp_path / "test_data"
     # test_file = settings.data_file_path
-    repository = JSONFileManager(model=Task, data_path=test_file)
+
+    # repository = JSONFileManager(model=Task, data_path=test_file)
+    repository = CSVFileManager(model=Task, data_path=test_file)
 
     test_data = [
         Task(

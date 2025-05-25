@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 import pytest
 
@@ -24,17 +24,17 @@ class TestTaskModel:
         assert task.to_dict() == expected_dict
 
     def test_validate_due_date_format(self):
-        date_n_time = DATE_STR
+        _date = DATE_STR
         task = Task(
             id=1,
             title='test_title',
             description='test_description',
             category=TaskCategoryEnum.PERSONAL.value,
-            due_date=date_n_time,
+            due_date=_date,
             priority=TaskPriorityEnum.LOW.value,
             status=TaskStatusEnum.NOT_COMPLETED.value
         )
-        assert isinstance(task.due_date, datetime)
+        assert isinstance(task.due_date, date)
 
     @pytest.mark.parametrize('date_n_time, expected_error_message',
                                  [
