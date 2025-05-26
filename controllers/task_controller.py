@@ -11,6 +11,11 @@ class TaskController:
     def __init__(self, service: TaskService):
         self.service = service
 
+    # TODO: Внедрить интерфейс для консоли. Тестировать через интерфейс
+    #     def __init__(self, service: TaskService, console: ConsoleInterface):
+    #         self.service = service
+    #         self.console = console  # Зависимость от абстракции!
+
     def add_task(self) -> None:
         """Добавление новой таски"""
         try:
@@ -26,6 +31,12 @@ class TaskController:
             ]
             task = self.service.add_task(title, description, due_date, category, priority)
             console.print_message_with_task_info(task, MESSAGE_LEXICON['add_task_success'])
+            # Контроллер тесно связан с конкретной реализацией console. Это создает жесткую зависимость, что
+            # усложнит тестирование и замену консольного интерфейса.
+            # В текущей реализации замена console на другой интерфейс потребует изменений в самом контроллере,
+            # что нарушает принцип инверсии зависимостей (DIP)
+            # Принцип единственной ответственности (SRP): Контроллер занимается не только управлением задачами,
+            # но и взаимодействием с UI
         except ValueError as e:
             console.print_exception_message(e)
             # logger.log_exception(traceback.format_exc())

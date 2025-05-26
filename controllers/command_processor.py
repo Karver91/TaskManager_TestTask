@@ -1,5 +1,5 @@
 from controllers.task_controller import TaskController
-from lexicon.lexicon_manager import COMMANDS_LEXICON, EXCEPTION_LEXICON, MESSAGE_LEXICON
+from lexicon.lexicon_manager import COMMANDS_LEXICON, MESSAGE_LEXICON
 from views.view import console
 
 
