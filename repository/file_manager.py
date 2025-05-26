@@ -7,7 +7,31 @@ from config import settings
 from lexicon.lexicon_manager import EXCEPTION_LEXICON
 
 
-class BaseFileManager(ABC):
+class FileManagerInterface(ABC):
+    data: list
+
+    @abstractmethod
+    def read_file(self) -> list:
+        raise NotImplementedError
+
+    @abstractmethod
+    def write_file(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def generate_id(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def add_data_obj(self, obj):
+        raise NotImplementedError
+
+    @abstractmethod
+    def remove_data_obj(self, obj):
+        raise NotImplementedError
+
+
+class BaseFileManager(FileManagerInterface):
     """Базовый класс для работы с файлом данных"""
 
     def __init__(self, model, data_path):
@@ -92,7 +116,6 @@ class CSVFileManager(BaseFileManager):
                 return [self.model(**item) for item in reader]
         except FileNotFoundError:
             return []
-
 
     def write_file(self) -> None:
         try:

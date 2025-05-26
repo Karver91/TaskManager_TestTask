@@ -1,15 +1,15 @@
 from enums import TaskStatusEnum
 from lexicon.lexicon_manager import MESSAGE_LEXICON, EXCEPTION_LEXICON
 from models.task_models import Task
-from repository.file_manager import BaseFileManager
+from repository.file_manager import FileManagerInterface
 
 
 class BaseService:
-    def __init__(self, repository: BaseFileManager):
+    def __init__(self, repository: FileManagerInterface):
         self.repository = repository
 
     @staticmethod
-    def get_enumerate_commands(values, methods=None, cansel_command: bool = False) -> dict[dict]:
+    def get_enumerate_commands(values, methods=None, cansel_command: bool = False) -> dict[str, dict]:
         """Возвращает список команд для изменения статуса"""
         # Создаем вложенный словарь команд, используя генератор словарей
         commands = {str(key): {'description': value, 'method': methods[key - 1] if methods else None}
@@ -60,7 +60,7 @@ class BaseService:
 class TaskService(BaseService):
     """Отвечает за обработку бизнес-логики, связанной с моделью Task"""
 
-    def __init__(self, repository: BaseFileManager):
+    def __init__(self, repository: FileManagerInterface):
         super().__init__(repository)
 
     def add_task(self, title, description, due_date, category, priority):
